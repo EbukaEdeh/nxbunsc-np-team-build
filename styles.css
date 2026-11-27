@@ -1,0 +1,215 @@
+:root{
+  --ink:#eaf3f7;
+  --dim:#a3b3bb;
+  --line:rgba(255,255,255,.2);
+  --panel:rgba(9,14,12,.55);
+  --cyan:#7ef2ff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1000px 520px at 80% 6%, rgba(156,126,214,.5), transparent 62%),
+    radial-gradient(760px 420px at 10% 2%, rgba(126,168,226,.3), transparent 66%),
+    radial-gradient(1400px 700px at 48% 118%, rgba(74,116,52,.9), transparent 62%),
+    linear-gradient(180deg,#2b2142 0%,#4c4662 20%,#6f7f52 48%,#43602f 76%,#1e2d16 100%);
+  background-attachment:fixed;
+  min-height:100%;
+}
+.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(120% 80% at 50% 40%, transparent 45%, rgba(0,0,0,.55) 100%);}
+
+/* ---------- top bar ---------- */
+.topbar{position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between;
+  padding:6px 20px 2px;}
+.brand{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.55)}
+.brand b{color:#fff; font-weight:800}
+.brand em{font-style:normal; color:var(--cyan); opacity:.85}
+.player{font-size:17px; font-style:italic; font-weight:800; color:rgba(255,255,255,.9);
+  text-shadow:0 2px 10px rgba(0,0,0,.6)}
+
+/* ---------- layout ---------- */
+.screen{position:relative; z-index:2; display:grid;
+  grid-template-columns:minmax(0,610px) minmax(280px,1fr);
+  gap:20px; padding:6px 20px 24px; align-items:start;}
+.left{min-width:0}
+
+/* ---------- team bar ---------- */
+.teambar{display:flex; align-items:center; gap:12px; padding:7px 10px; margin-bottom:8px;
+  background:var(--panel); border:1px solid var(--line); border-radius:4px; backdrop-filter:blur(7px);}
+.slots{display:flex; gap:5px}
+.slot{position:relative; width:58px; height:58px; padding:0; cursor:pointer; overflow:hidden;
+  border:1px solid rgba(255,255,255,.3); border-radius:3px;
+  background:linear-gradient(180deg, rgba(38,48,38,.85), rgba(8,12,8,.92));
+  box-shadow:inset 0 0 16px rgba(0,0,0,.7); display:grid; place-items:center; transition:.12s;}
+.slot.empty::after{content:"+"; font:700 24px/1 "Segoe UI",sans-serif; color:rgba(232,255,232,.8)}
+.slot.empty:hover{background:linear-gradient(180deg, rgba(54,68,54,.9), rgba(12,18,12,.95))}
+.slot.filled{border-color:var(--cyan);
+  box-shadow:0 0 0 1px rgba(126,242,255,.45), 0 0 14px rgba(80,220,255,.5), inset 0 0 16px rgba(0,0,0,.6)}
+.slot .ava{position:absolute; inset:0; border:0; box-shadow:none}
+.slot .dp{left:1px; bottom:1px; padding:0 2px}
+.slot .dp b{font-size:10px}
+
+.total{margin-left:auto; text-align:right; min-width:84px}
+.tlabel{font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.7)}
+.tval{font-size:25px; font-weight:300; line-height:1.05; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.7)}
+.tval b{font-weight:600}
+.tval span{font-size:12px; color:rgba(255,255,255,.6); margin-left:1px}
+.tval.over b{color:#ff6b6b}
+.reset{padding:6px 10px; font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,.8); background:rgba(255,255,255,.06);
+  border:1px solid var(--line); border-radius:3px; cursor:pointer}
+.reset:hover{background:rgba(255,255,255,.14); color:#fff}
+
+/* ---------- sort bar ---------- */
+.sortbar{display:flex; align-items:center; gap:5px; margin-bottom:6px; padding:5px 9px;
+  background:var(--panel); border:1px solid var(--line); border-radius:4px; backdrop-filter:blur(7px)}
+.sortbar span{font-size:8.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,.5); margin-right:4px}
+.sortbar button{font:inherit; font-size:9.5px; font-weight:600; letter-spacing:.04em;
+  padding:3px 10px; border-radius:3px; cursor:pointer;
+  background:rgba(255,255,255,.06); border:1px solid var(--line); color:rgba(255,255,255,.8)}
+.sortbar button:hover{background:rgba(255,255,255,.15); color:#fff}
+.sortbar button.on{background:var(--cyan); border-color:var(--cyan); color:#06262e; font-weight:800}
+
+/* ---------- roster grid ---------- */
+.grid{display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:6px; max-width:600px;
+  padding:8px; background:var(--panel); border:1px solid var(--line); border-radius:4px;
+  backdrop-filter:blur(7px)}
+.tile{position:relative; padding:0; cursor:pointer; text-align:left; background:none; border:0;
+  color:inherit; font:inherit; display:block; min-width:0}
+
+.ava{position:relative; display:block; width:100%; aspect-ratio:1/1; border-radius:2px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.18);
+  background:
+    radial-gradient(circle at 50% 26%, var(--glow) -28%, transparent 62%),
+    linear-gradient(180deg,#1a232c 0%,#0c1116 100%);
+  box-shadow:inset 0 2px 0 var(--tier), inset 0 0 14px rgba(0,0,0,.7);
+  transition:transform .1s, box-shadow .1s, border-color .1s;}
+
+.ava .initial{position:absolute; inset:0; display:none; place-items:center; z-index:0;
+  font-size:16px; font-weight:800; font-style:italic; color:#fff;
+  text-shadow:0 2px 5px rgba(0,0,0,.85), 0 0 14px var(--glow)}
+.ava.noimg .initial{display:grid}
+
+.ava .pic{position:absolute; left:0; top:0; width:100%; height:100%; z-index:1;
+  object-fit:cover; object-position:50% 6%;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+/* whole-figure art (local files) - fills the square, anchored on the upper body */
+.ava .pic.fit{object-fit:cover; object-position:50% 22%;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.75))}
+
+.ava::after{content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:linear-gradient(180deg, transparent 52%, rgba(0,0,0,.6) 100%)}
+
+.tile:hover .ava{transform:translateY(-2px); border-color:rgba(255,255,255,.5)}
+.tile.locked .ava{filter:grayscale(1) brightness(.4); opacity:.45; cursor:not-allowed}
+.tile.locked:hover .ava{transform:none; border-color:rgba(255,255,255,.18)}
+.tile.locked .nm{opacity:.35}
+.tile.locked .ava::before{content:"✕"; position:absolute; top:1px; right:2px; z-index:3;
+  font-size:8px; font-weight:800; color:#ffdada; background:rgba(120,20,20,.9);
+  border-radius:2px; width:11px; height:11px; display:grid; place-items:center}
+.tile.picked .ava{border-color:var(--cyan);
+  box-shadow:inset 0 2px 0 var(--tier), 0 0 0 1px var(--cyan), 0 0 14px rgba(80,220,255,.65)}
+.tile.picked .ava::before{content:"✓"; position:absolute; top:1px; right:2px; z-index:3;
+  font-size:8px; font-weight:800; color:#062a33; background:var(--cyan);
+  border-radius:2px; width:11px; height:11px; display:grid; place-items:center}
+
+.dp{position:absolute; left:1px; bottom:1px; z-index:4; display:flex; align-items:baseline; gap:1px;
+  padding:0 3px; border-radius:2px;
+  background:linear-gradient(180deg, rgba(0,0,0,.8), rgba(0,0,0,.5));
+  border:1px solid rgba(120,220,255,.3)}
+.dp span{font-size:5.5px; letter-spacing:.05em; color:#8fd6ec; text-transform:uppercase}
+.dp b{font-size:12px; line-height:1.15; font-weight:700; color:#eefaff; text-shadow:0 0 5px rgba(60,210,255,.9)}
+
+/* support-type icon, top-left of every portrait */
+.sup{position:absolute; left:0; top:0; z-index:4; display:block;
+  width:18px; height:18px; filter:drop-shadow(0 1px 2px rgba(0,0,0,.95))}
+.sup img{width:100%; height:100%; object-fit:contain; display:block}
+.sup.none{width:7px; height:7px; margin:3px; border-radius:50%; background:rgba(255,255,255,.3)}
+.sup.fallback{width:auto; height:auto; padding:1px 2px; border-radius:2px;
+  font-size:6px; font-weight:800; line-height:1; background:rgba(0,0,0,.8); color:#cfe9f2}
+.supmini{width:12px; height:12px; object-fit:contain; vertical-align:-2px; margin-right:4px}
+
+.tile .nm{display:block; margin-top:3px; font-size:9px; font-weight:600; line-height:1.15;
+  color:rgba(255,255,255,.85); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+/* ---------- page nav ---------- */
+.pagenav{display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin-top:8px; padding:6px 10px; background:var(--panel); border:1px solid var(--line);
+  border-radius:4px; backdrop-filter:blur(7px)}
+.pagenav a,.pagenav span{font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,.78); text-decoration:none; padding:4px 10px;
+  border:1px solid var(--line); border-radius:3px}
+.pagenav a:hover{background:rgba(255,255,255,.14); color:#fff}
+.pagenav .off{opacity:.28; border-color:transparent}
+.pagenav .dots{display:flex; gap:4px; padding:0; border:0}
+.pagenav .dots a,.pagenav .dots i{width:20px; height:20px; display:grid; place-items:center;
+  padding:0; font-size:9px; font-style:normal; border-radius:3px}
+.pagenav .dots i{background:var(--cyan); color:#06262e; border-color:var(--cyan); font-weight:800}
+
+/* ---------- detail panel ---------- */
+.right{position:sticky; top:10px}
+.detail{position:relative; padding:2px 2px 0; overflow:hidden}
+.detail::before{content:""; position:absolute; left:-20px; right:-20px; top:-14px; height:170px; z-index:0;
+  background:linear-gradient(180deg, rgba(10,16,12,.62) 0%, rgba(10,16,12,.28) 55%, transparent 100%);
+  pointer-events:none}
+.watermark{position:absolute; right:-6px; top:-24px; font-size:150px; font-weight:800; font-style:italic;
+  color:rgba(255,255,255,.05); line-height:1; pointer-events:none; user-select:none}
+
+.bigpic{position:absolute; right:-26px; top:-8px; height:168px; opacity:.26;
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,.8));
+  -webkit-mask-image:linear-gradient(180deg,#000 50%, transparent 100%);
+  mask-image:linear-gradient(180deg,#000 50%, transparent 100%); pointer-events:none}
+.bigpic.fit{object-fit:contain; object-position:50% 50%}
+
+.cname{position:relative; font-size:28px; line-height:1; font-weight:800; font-style:italic;
+  letter-spacing:-.02em; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.3), 0 5px 18px rgba(0,0,0,.75)}
+.cform{position:relative; margin-top:4px; font-size:11px; font-weight:600; color:rgba(255,255,255,.82);
+  text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.cmeta{position:relative; margin-top:1px; font-size:8.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.5)}
+
+.card{position:relative; margin-top:8px; background:rgba(12,20,16,.55); border:1px solid var(--line);
+  border-radius:4px; padding:7px 10px; backdrop-filter:blur(7px)}
+/* leave room under the name so the character silhouette reads before the cards start */
+.card.tier{margin-top:46px}
+.card h3{margin:0 0 4px; font-size:9px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.7); display:flex; justify-content:space-between}
+.card h3 i{font-style:normal; color:rgba(255,255,255,.38)}
+.card p{margin:0; font-size:10.5px; line-height:1.45; color:rgba(255,255,255,.76)}
+.rows{display:grid; gap:3px; font-size:10.5px}
+.row{display:flex; justify-content:space-between; gap:10px; color:rgba(255,255,255,.6)}
+.row b{color:#fff; font-weight:600}
+.costdot{display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:5px; vertical-align:1px}
+
+.legend{display:flex; flex-wrap:wrap; gap:4px; margin-top:4px}
+.legend i{font-style:normal; font-size:8px; letter-spacing:.06em; text-transform:uppercase;
+  padding:2px 5px; border-radius:2px; color:#0a1216; font-weight:700}
+.legend .supkey{display:flex; align-items:center; gap:4px; font-size:8px; font-weight:600;
+  letter-spacing:.02em; text-transform:none; color:rgba(255,255,255,.78);
+  background:none; padding:0; width:calc(50% - 4px)}
+.legend .supkey img{width:13px; height:13px; object-fit:contain; flex:0 0 13px}
+
+.hint{font-size:10.5px; line-height:1.5; color:rgba(255,255,255,.6)}
+
+/* ---------- toast ---------- */
+.toast{position:fixed; left:50%; bottom:20px; transform:translate(-50%,12px);
+  padding:7px 14px; border-radius:3px; font-size:10px; letter-spacing:.09em; text-transform:uppercase;
+  background:rgba(10,18,14,.94); border:1px solid rgba(255,110,110,.5); color:#ffd9d9;
+  opacity:0; pointer-events:none; transition:.18s; z-index:9}
+.toast.show{opacity:1; transform:translate(-50%,0)}
+.toast.ok{border-color:rgba(126,242,255,.5); color:#d6fbff}
+
+@media (max-width:880px){
+  .screen{grid-template-columns:1fr; padding:6px 12px 24px}
+  .right{position:static; order:-1}
+  .cname{font-size:24px}
+  .grid{max-width:none; grid-template-columns:repeat(8,1fr)}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:repeat(6,1fr)}
+}
